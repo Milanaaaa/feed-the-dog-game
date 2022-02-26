@@ -23,7 +23,7 @@ def inter(x1, y1, x2, y2, db1, db2):
         return False
 
 
-class Zombi:
+class Meals:
     def __init__(self, x, y, image, cat):
         self.x = x
         self.y = y
@@ -42,7 +42,7 @@ player.set_colorkey((255, 255, 255))
 
 img_p = pygame.image.load('taksa_game_images/taksa.png')
 img_bg = pygame.image.load('taksa_game_images/grass.png')
-zombi_pics = ['taksa_game_images/sausage.png', 'taksa_game_images/bone.png', 'taksa_game_images/cutlet.png',
+meals_pics = ['taksa_game_images/sausage.png', 'taksa_game_images/bone.png', 'taksa_game_images/cutlet.png',
               'taksa_game_images/spider.png', 'taksa_game_images/bad_bone.png']
 
 count = 0
@@ -51,7 +51,7 @@ my_font = pygame.font.SysFont('monospace', 15)
 string = my_font.render('Поймано: ' + str(count), 0, (0, 255, 0))
 string2 = my_font.render('Пропущено: ' + str(bad_count), 0, (255, 0, 0))
 
-z_x = 0.
+z_x = 0
 
 z_y = 0
 
@@ -61,32 +61,32 @@ p_y = 300
 done = False
 game_over = False
 
-monsters = []
+meal = []
 
 while not done:
-    if not game_over and len(monsters) < 1:
+    if not game_over and len(meal) < 1:
         z_x = 600
         z_y = random.randrange(540)
-        pic = random.choice(zombi_pics)
+        pic = random.choice(meals_pics)
         cat = True
         if pic == 'taksa_game_images/spider.png' or pic == 'taksa_game_images/bad_bone.png':
             cat = False
-        monsters.append(Zombi(z_x, z_y, pic, cat))
+        meal.append(Meals(z_x, z_y, pic, cat))
 
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             done = True
         if e.type == pygame.KEYDOWN and e.key == pygame.K_s:
-            p_y += 0.001
+            p_y += 15
         if e.type == pygame.KEYDOWN and e.key == pygame.K_w:
-            p_y -= 0.001
+            p_y -= 15
             # if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
 
             # if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
             #     p_x -= 10
             # if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
             #     p_x += 10
-    for z in monsters:
+    for z in meal:
         if inter(z.x, z.y, p_x, p_y, 40, 60):
             if z.cat is False:
                 count -= 2
@@ -95,15 +95,15 @@ while not done:
             z.y = 1000
 
             count += 1
-            monsters.pop(monsters.index(z))
+            meal.pop(meal.index(z))
             string = my_font.render('Поймано: ' + str(count), 0, (0, 255, 0))
 
-    for m in monsters:
-        m.x -= 1
+    for m in meal:
+        m.x -= 0.1
         if m.x < 0:
             m.x = 1000
             m.y = 1000
-            monsters.pop(monsters.index(m))
+            meal.pop(meal.index(m))
             if z.cat is True:
                 bad_count += 1
             string2 = my_font.render('Пропущено: ' + str(bad_count), 0, (255, 0, 0))
@@ -115,7 +115,7 @@ while not done:
     screen.blit(img_bg, (0, 0))
     player.blit(img_p, (0, 0))
 
-    for m in monsters:
+    for m in meal:
         m.shape.set_colorkey((255, 255, 255))
         m.shape.blit(m.img, (0, 0))
         screen.blit(m.shape, (m.x, m.y))
@@ -138,6 +138,6 @@ while not done:
             p_y = 300
             done = False
             game_over = False
-            monsters = []
+            meal = []
 
 pygame.quit()
